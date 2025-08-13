@@ -1,0 +1,9 @@
+{
+  "short_name": "Job tracker",
+  "name": "Automated job application tracker",
+  "icons": [],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}
