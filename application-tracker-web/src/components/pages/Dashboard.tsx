@@ -1,10 +1,14 @@
 import { Container, Typography, Button } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ApplicationsTable from "../ApplicationsTable";
 import AddApplicationModal from "../AddApplicationModal";
 import { Application } from "../../types/application";
 import { useDispatch, useSelector } from "react-redux";
-import { addApplication } from "../../store/ApplicationSlice";
+import {
+  addApplication,
+  setInitialApplications,
+} from "../../store/ApplicationSlice";
+import { getFormattedApplications } from "../../utils/typeFormatters";
 
 export default function Dashboard() {
   const applications = useSelector(
@@ -14,10 +18,24 @@ export default function Dashboard() {
 
   const [modalOpen, setModalOpen] = useState(false);
 
+  const fetchApplications = () => {
+    return fetch("http://localhost:5000/applications")
+      .then((data) => data.json())
+      .then((data) => {
+        const apps = getFormattedApplications(data);
+        dispatch(setInitialApplications(apps));
+        return;
+      });
+  };
+
   const handleSave = (data: Application) => {
     dispatch(addApplication(data));
     setModalOpen(false);
   };
+
+  useEffect(function () {
+    fetchApplications();
+  });
 
   return (
     <Container maxWidth="lg">

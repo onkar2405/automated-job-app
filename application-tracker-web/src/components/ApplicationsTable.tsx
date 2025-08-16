@@ -24,7 +24,7 @@ export default function ApplicationsTable({
         </TableRow>
       </TableHead>
       <TableBody>
-        {applications.map((app) => (
+        {applications?.map((app) => (
           <TableRow key={app.id}>
             <TableCell>{app.company}</TableCell>
             <TableCell>{app.role}</TableCell>

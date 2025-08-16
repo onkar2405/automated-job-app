@@ -3,22 +3,7 @@ import { Application } from "../types/application";
 
 // TODO: change date from string to Date type
 const initialState = {
-  applications: [
-    {
-      id: 1,
-      company: "Google",
-      role: "Frontend Engineer",
-      status: "Applied",
-      date: "2025-08-15",
-    },
-    {
-      id: 2,
-      company: "Amazon",
-      role: "Backend Developer",
-      status: "Interview",
-      date: "2025-08-15",
-    },
-  ],
+  applications: [],
 };
 
 export const applicationSlice = createSlice({
@@ -28,8 +13,13 @@ export const applicationSlice = createSlice({
     addApplication: (state: any, action: PayloadAction<Application>) => {
       state.applications.push(action.payload);
     },
+    setInitialApplications: (state: any, action: PayloadAction<any>) => {
+      console.log(action.payload);
+      state.applications = action.payload;
+    },
   },
 });
 
-export const { addApplication } = applicationSlice.actions;
+export const { addApplication, setInitialApplications } =
+  applicationSlice.actions;
 export default applicationSlice.reducer;
