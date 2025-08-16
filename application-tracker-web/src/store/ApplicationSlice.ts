@@ -14,7 +14,6 @@ export const applicationSlice = createSlice({
       state.applications.push(action.payload);
     },
     setInitialApplications: (state: any, action: PayloadAction<any>) => {
-      console.log(action.payload);
       state.applications = action.payload;
     },
   },

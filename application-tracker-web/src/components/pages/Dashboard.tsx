@@ -4,10 +4,7 @@ import ApplicationsTable from "../ApplicationsTable";
 import AddApplicationModal from "../AddApplicationModal";
 import { Application } from "../../types/application";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  addApplication,
-  setInitialApplications,
-} from "../../store/ApplicationSlice";
+import { setInitialApplications } from "../../store/ApplicationSlice";
 import { getFormattedApplications } from "../../utils/typeFormatters";
 
 export default function Dashboard() {
@@ -28,14 +25,40 @@ export default function Dashboard() {
       });
   };
 
+  const addApplication = async (data: Application) => {
+    const { id, company, date, role, status } = data;
+
+    const payLoadData = {
+      id,
+      company,
+      appliedOn: date,
+      role,
+      status: "APPLIED",
+    };
+
+    const response = await fetch("http://localhost:5000/applications", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payLoadData),
+    });
+    console.log("response", response);
+
+    setTimeout(() => {
+      fetchApplications();
+    }, 2000);
+    console.log("applications after POST", applications);
+  };
+
   const handleSave = (data: Application) => {
-    dispatch(addApplication(data));
+    addApplication(data);
     setModalOpen(false);
   };
 
   useEffect(function () {
     fetchApplications();
-  });
+  }, []);
 
   return (
     <Container maxWidth="lg">

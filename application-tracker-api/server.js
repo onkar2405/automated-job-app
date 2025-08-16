@@ -25,11 +25,30 @@ app.get("/applications", async (req, res) => {
   res.json(data);
 });
 
-// app.post("/applications", async (req, res) => {
-//   const { company, role, status, date } = req.body;
-//   const {data} = await supabase.from("applications").insert(req.)
-//   res.json(newApp);
-// });
+app.post("/applications", async (req, res) => {
+  console.log("ONKAR", req);
+  const { company, role, status, appliedOn } = req.body;
+
+  try {
+    const { data, error } = await supabase
+      .from("applications")
+      .insert([
+        {
+          company,
+          role,
+          status,
+          applied_on: appliedOn, // ensure it matches your DB column
+        },
+      ])
+      .select();
+
+    if (error) return res.status(400).json({ error: error.message });
+
+    res.json({ application: data[0] });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
