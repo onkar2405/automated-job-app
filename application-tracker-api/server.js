@@ -26,7 +26,6 @@ app.get("/applications", async (req, res) => {
 });
 
 app.post("/applications", async (req, res) => {
-  console.log("ONKAR", req);
   const { company, role, status, appliedOn } = req.body;
 
   try {
@@ -37,7 +36,8 @@ app.post("/applications", async (req, res) => {
           company,
           role,
           status,
-          applied_on: appliedOn, // ensure it matches your DB column
+          applied_on: appliedOn,
+          notes: "just applied",
         },
       ])
       .select();

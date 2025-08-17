@@ -7,6 +7,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { setInitialApplications } from "../../store/ApplicationSlice";
 import { getFormattedApplications } from "../../utils/typeFormatters";
 
+/**
+ * Function component to display to Job dashboard.
+ */
 export default function Dashboard() {
   const applications = useSelector(
     (state: any) => state.applicationReducer.applications
@@ -26,7 +29,7 @@ export default function Dashboard() {
   };
 
   const addApplication = async (data: Application) => {
-    const { id, company, date, role, status } = data;
+    const { id, company, date, role } = data;
 
     const payLoadData = {
       id,
@@ -36,19 +39,19 @@ export default function Dashboard() {
       status: "APPLIED",
     };
 
-    const response = await fetch("http://localhost:5000/applications", {
+    await fetch("http://localhost:5000/applications", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        "Content-type": "application/json; charset=UTF-8",
       },
       body: JSON.stringify(payLoadData),
+    }).catch((e) => {
+      throw e;
     });
-    console.log("response", response);
 
     setTimeout(() => {
       fetchApplications();
     }, 2000);
-    console.log("applications after POST", applications);
   };
 
   const handleSave = (data: Application) => {

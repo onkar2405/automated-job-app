@@ -11,8 +11,10 @@ import { Application } from "../types/application";
 
 /**
  * Component to hold the Job application data.
- * @param param0
- * @returns
+ * @param applications - set of currently applied jobs.
+ * @param open - whether application modal is open
+ * @param onClose - method to close the modal
+ * @param onSave - method to add the application
  */
 export default function AddApplicationModal({
   applications,

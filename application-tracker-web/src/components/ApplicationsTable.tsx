@@ -8,6 +8,10 @@ import {
 
 import { Application } from "../types/application";
 
+/**
+ * Function component to return the Applications table.
+ * @param applications - job applications to be displayed.
+ */
 export default function ApplicationsTable({
   applications,
 }: {
