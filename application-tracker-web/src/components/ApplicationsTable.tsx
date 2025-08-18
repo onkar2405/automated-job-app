@@ -4,8 +4,9 @@ import {
   TableRow,
   TableCell,
   TableBody,
+  Button,
 } from "@mui/material";
-
+import DeleteIcon from "@mui/icons-material/Delete";
 import { Application } from "../types/application";
 
 /**
@@ -14,8 +15,10 @@ import { Application } from "../types/application";
  */
 export default function ApplicationsTable({
   applications,
+  removeApplication,
 }: {
   applications: Application[];
+  removeApplication: any;
 }) {
   return (
     <Table>
@@ -25,6 +28,7 @@ export default function ApplicationsTable({
           <TableCell>Role</TableCell>
           <TableCell>Status</TableCell>
           <TableCell>Date</TableCell>
+          <TableCell></TableCell>
         </TableRow>
       </TableHead>
       <TableBody>
@@ -34,6 +38,15 @@ export default function ApplicationsTable({
             <TableCell>{app.role}</TableCell>
             <TableCell>{app.status}</TableCell>
             <TableCell>{app.date}</TableCell>
+            <TableCell>
+              <Button
+                size="small"
+                variant="text"
+                onClick={() => removeApplication(app.id)}
+              >
+                <DeleteIcon />
+              </Button>
+            </TableCell>
           </TableRow>
         ))}
       </TableBody>

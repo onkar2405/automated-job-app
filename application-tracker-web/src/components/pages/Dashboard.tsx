@@ -21,11 +21,25 @@ export default function Dashboard() {
   const fetchApplications = () => {
     return fetch("http://localhost:5000/applications")
       .then((data) => data.json())
-      .then((data) => {
-        const apps = getFormattedApplications(data);
-        dispatch(setInitialApplications(apps));
-        return;
-      });
+      .then((data) =>
+        dispatch(setInitialApplications(getFormattedApplications(data)))
+      );
+  };
+
+  const removeApplication = (id: number) => {
+    fetch("http://localhost:5000/removeApplication", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+      body: JSON.stringify({
+        id,
+      }),
+    }).then((res) => {
+      if (res.ok) {
+        fetchApplications();
+      }
+    });
   };
 
   const addApplication = async (data: Application) => {
@@ -39,7 +53,7 @@ export default function Dashboard() {
       status: "APPLIED",
     };
 
-    await fetch("http://localhost:5000/applications", {
+    await fetch("http://localhost:5000/addApplication", {
       method: "POST",
       headers: {
         "Content-type": "application/json; charset=UTF-8",
@@ -61,6 +75,7 @@ export default function Dashboard() {
 
   useEffect(function () {
     fetchApplications();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -78,7 +93,10 @@ export default function Dashboard() {
         Add Application
       </Button>
 
-      <ApplicationsTable applications={applications} />
+      <ApplicationsTable
+        applications={applications}
+        removeApplication={removeApplication}
+      />
 
       <AddApplicationModal
         applications={applications}

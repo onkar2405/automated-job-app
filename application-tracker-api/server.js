@@ -25,7 +25,7 @@ app.get("/applications", async (req, res) => {
   res.json(data);
 });
 
-app.post("/applications", async (req, res) => {
+app.post("/addApplication", async (req, res) => {
   const { company, role, status, appliedOn } = req.body;
 
   try {
@@ -40,6 +40,22 @@ app.post("/applications", async (req, res) => {
           notes: "just applied",
         },
       ])
+      .select();
+
+    if (error) return res.status(400).json({ error: error.message });
+
+    res.json({ application: data[0] });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.post("/removeApplication", async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from("applications")
+      .delete()
+      .eq("id", req.body.id)
       .select();
 
     if (error) return res.status(400).json({ error: error.message });
