@@ -7,13 +7,6 @@ dotenv.config();
 const app = express();
 const prisma = new PrismaClient();
 
-const { createClient } = require("@supabase/supabase-js");
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-);
-
 // No auth required here:
 
 app.use(cors());
@@ -26,7 +19,7 @@ app.get("/applications", async (req, res) => {
 });
 
 app.post("/addApplication", async (req, res) => {
-  const { company, role, status, appliedOn } = req.body;
+  const { company, role, status, appliedOn, gmail_message_id } = req.body;
 
   try {
     const { data, error } = await supabase
@@ -38,11 +31,16 @@ app.post("/addApplication", async (req, res) => {
           status,
           applied_on: appliedOn,
           notes: "just applied",
+          gmail_message_id, // 🔑 unique Gmail ID
         },
       ])
       .select();
 
     if (error) return res.status(400).json({ error: error.message });
+
+    if (error && error.code === "23505") {
+      console.log("Duplicate email, skipping insert.");
+    }
 
     res.json({ application: data[0] });
   } catch (err) {
@@ -64,6 +62,20 @@ app.post("/removeApplication", async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
+});
+
+// Run Gmail fetch every 10 minutes
+
+const cron = require("node-cron");
+const gmailRoutes = require("./routes/gmail");
+const { fetchEmails } = require("./gmail/gmailService");
+const supabase = require("./utils/supabaseClient");
+
+app.use("/", gmailRoutes);
+
+cron.schedule("*/10 * * * *", () => {
+  console.log("⏳ Checking Gmail...");
+  fetchEmails();
 });
 
 const PORT = process.env.PORT || 5000;
