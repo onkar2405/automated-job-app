@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const { PrismaClient } = require("@prisma/client");
+const sessions = require("express-session");
 
 dotenv.config();
 const app = express();
@@ -11,6 +12,16 @@ const prisma = new PrismaClient();
 
 app.use(cors());
 app.use(express.json());
+
+// Sessions
+app.use(
+  sessions({
+    secret: process.env.SESSION_SECRET || "supersecret",
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false }, // true only with https
+  })
+);
 
 // Routes
 app.get("/applications", async (req, res) => {
@@ -70,6 +81,7 @@ const cron = require("node-cron");
 const gmailRoutes = require("./routes/gmail");
 const { fetchEmails } = require("./gmail/gmailService");
 const supabase = require("./utils/supabaseClient");
+const session = require("express-session");
 
 app.use("/", gmailRoutes);
 
