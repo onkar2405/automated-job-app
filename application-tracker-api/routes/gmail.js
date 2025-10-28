@@ -5,10 +5,6 @@ const { oAuth2Client } = require("../gmail/gmailClient");
 
 const router = express.Router();
 const { google } = require("googleapis");
-// function requireLogin(req, res, next) {
-//   if (!req.session.user) return res.redirect("/login");
-//   next();
-// }
 
 // Login page
 router.get("/login", (req, res) => {
@@ -28,50 +24,15 @@ router.get("/auth", (req, res) => {
   const url = oAuth2Client.generateAuthUrl({
     access_type: "offline", // ensures refresh_token is returned
     prompt: "consent", // ensures Google always sends refresh_token first time
-    scope: ["https://www.googleapis.com/auth/gmail.readonly"],
+    scope: [
+      "https://www.googleapis.com/auth/gmail.readonly",
+      "https://www.googleapis.com/auth/gmail.send",
+      "https://www.googleapis.com/auth/userinfo.profile",
+      "https://www.googleapis.com/auth/userinfo.email",
+    ],
   });
   res.redirect(url);
 });
-
-// Step 2: Handle callback from Google
-// router.get("/oauth2callback", async (req, res) => {
-//   const code = req.query.code;
-
-//   try {
-//     const { tokens } = await oAuth2Client.getToken(code);
-//     oAuth2Client.setCredentials(tokens);
-
-//     console.log("✅ Tokens received:", tokens);
-
-//     // Save refresh_token to .env file if present
-//     if (tokens.refresh_token) {
-//       const envPath = path.join(__dirname, "../..", ".env");
-//       let envFile = fs.existsSync(envPath)
-//         ? fs.readFileSync(envPath, "utf8")
-//         : "";
-
-//       // Replace old token if exists, otherwise append
-//       if (envFile.includes("GOOGLE_REFRESH_TOKEN=")) {
-//         envFile = envFile.replace(
-//           /GOOGLE_REFRESH_TOKEN=.*/g,
-//           `GOOGLE_REFRESH_TOKEN=${tokens.refresh_token}`
-//         );
-//       } else {
-//         envFile += `\nGOOGLE_REFRESH_TOKEN=${tokens.refresh_token}`;
-//       }
-
-//       fs.writeFileSync(envPath, envFile);
-//       console.log("🔑 Refresh Token saved to .env");
-//     }
-
-//     res.send(
-//       "Authorization successful! Refresh token saved. You can close this tab."
-//     );
-//   } catch (err) {
-//     console.error("❌ Error during callback:", err);
-//     res.status(500).send("Auth error");
-//   }
-// });
 
 router.get("/oauth2callback", async (req, res) => {
   const code = req.query.code;
@@ -79,14 +40,38 @@ router.get("/oauth2callback", async (req, res) => {
     const { tokens } = await oAuth2Client.getToken(code);
     oAuth2Client.setCredentials(tokens);
 
+    // Save tokens to .env file
+    const envPath = path.join(__dirname, "../.env");
+    let envContent = fs.existsSync(envPath)
+      ? fs.readFileSync(envPath, "utf8") + "\n"
+      : "";
+
+    // Update or append tokens
+    if (tokens.refresh_token) {
+      envContent = envContent.replace(/GOOGLE_REFRESH_TOKEN=.*/g, "");
+      envContent += `GOOGLE_REFRESH_TOKEN=${tokens.refresh_token}\n`;
+    }
+    if (tokens.access_token) {
+      envContent = envContent.replace(/ACCESS_TOKEN=.*/g, "");
+      envContent += `ACCESS_TOKEN=${tokens.access_token}\n`;
+    }
+
+    fs.writeFileSync(envPath, envContent);
+
+    // Also set in current process
+    process.env.GOOGLE_REFRESH_TOKEN = tokens.refresh_token;
+    process.env.ACCESS_TOKEN = tokens.access_token;
+
     // Get the user's Google profile (email, name, picture)
     const oauth2 = google.oauth2({
       auth: oAuth2Client,
       version: "v2",
     });
 
-    const { data: profile } = await oauth2.userinfo.get();
+    console.log("oauth2 onkar");
 
+    const { data: profile } = await oauth2.userinfo.get();
+    console.log("profile", profile);
     // ✅ Store real user details in session
     req.session.user = {
       id: profile.id,
@@ -103,10 +88,5 @@ router.get("/oauth2callback", async (req, res) => {
     res.status(500).send("Auth error");
   }
 });
-
-// // Home (protected)
-// router.get("/home", requireLogin, (req, res) => {
-//   res.send(`Welcome ${req.session.user.email}!`);
-// });
 
 module.exports = router;

@@ -15,11 +15,18 @@ const oAuth2Client = new google.auth.OAuth2(
   redirect_uris[0] // e.g. http://localhost:5000/oauth2callback
 );
 
-// 👇 Attach refresh token if available (from .env)
+// // 👇 Attach refresh token if available (from .env)
 if (process.env.GOOGLE_REFRESH_TOKEN) {
   oAuth2Client.setCredentials({
     refresh_token: process.env.GOOGLE_REFRESH_TOKEN,
+    access_token: process.env.ACCESS_TOKEN,
   });
+
+  // Force refresh to ensure access_token is valid
+  oAuth2Client
+    .getAccessToken()
+    .then((token) => console.log("✅ Access token refreshed"))
+    .catch((err) => console.error("❌ Failed to refresh access token:", err));
 }
 
 module.exports = { oAuth2Client };

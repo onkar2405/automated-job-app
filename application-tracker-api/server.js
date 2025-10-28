@@ -3,14 +3,28 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const { PrismaClient } = require("@prisma/client");
 const sessions = require("express-session");
+const cron = require("node-cron");
 
 dotenv.config();
 const app = express();
 const prisma = new PrismaClient();
 
+// Import routes and services
+const gmailRoutes = require("./routes/gmail");
+const authRoutes = require("./routes/authRoutes");
+const supabase = require("./utils/supabaseClient");
+const { fetchEmails } = require("./gmail/gmailService");
+
 // No auth required here:
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:3000", // your React app's URL
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 app.use(express.json());
 
 // Sessions
@@ -19,7 +33,11 @@ app.use(
     secret: process.env.SESSION_SECRET || "supersecret",
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: false }, // true only with https
+    cookie: {
+      secure: false, // true only with https
+      sameSite: "lax",
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours
+    },
   })
 );
 
@@ -75,15 +93,11 @@ app.post("/removeApplication", async (req, res) => {
   }
 });
 
-// Run Gmail fetch every 10 minutes
-
-const cron = require("node-cron");
-const gmailRoutes = require("./routes/gmail");
-const { fetchEmails } = require("./gmail/gmailService");
-const supabase = require("./utils/supabaseClient");
-const session = require("express-session");
-
+// Mount routes
 app.use("/", gmailRoutes);
+app.use("/auth", authRoutes);
+
+// Run Gmail fetch every 10 minutes
 
 cron.schedule("*/10 * * * *", () => {
   console.log("⏳ Checking Gmail...");

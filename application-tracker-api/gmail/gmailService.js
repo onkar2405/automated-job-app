@@ -7,16 +7,21 @@ const {
 } = require("../utils/parseJobDetails.js");
 
 async function fetchEmails() {
+  const accessToken = await oAuth2Client.getAccessToken();
+  if (!accessToken) {
+    return;
+  }
   const gmail = google.gmail({ version: "v1", auth: oAuth2Client });
 
   const res = await gmail.users.messages.list({
     userId: "me",
-    maxResults: 10,
+    maxResults: 50, // Increased to get more emails
+    orderBy: "internalDate", // Sort by date
     q: "(in:inbox OR in:sent) newer_than:7d",
   });
 
   if (!res.data.messages || res.data.messages.length === 0) {
-    console.log("No new job-related emails found.");
+    console.info("No new job-related emails found.");
     return;
   }
 
@@ -48,7 +53,7 @@ async function fetchEmails() {
 
     // --- filter for job-related mails ---
     if (!isLikelyApplication({ subject, bodyText })) {
-      console.log("⏭️ Skipping non-application mail:", subject);
+      console.info("⏭️ Skipping non-application mail:", subject);
       continue;
     }
 
@@ -68,11 +73,11 @@ async function fetchEmails() {
     ]);
 
     if (error && error.code === "23505") {
-      console.log("Duplicate email found, skipping:", message.id);
+      console.info("Duplicate email found, skipping:", message.id);
     } else if (error) {
       console.error("Insert error:", error.message);
     } else {
-      console.log("✅ Inserted:", subject);
+      console.info("✅ Inserted:", subject);
     }
   }
 }

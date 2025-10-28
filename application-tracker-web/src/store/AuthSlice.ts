@@ -21,7 +21,10 @@ export const fetchAuthState = createAsyncThunk("auth/fetchStatus", async () => {
   }
 
   const data = await response.json();
-  return data.user as User | null;
+  if (!data.loggedIn || !data.user) {
+    return null;
+  }
+  return data.user as User;
 });
 
 export const authSlice = createSlice({
@@ -43,7 +46,7 @@ export const authSlice = createSlice({
         state.user = action.payload;
       }
     );
-    builder.addCase(fetchAuthState.rejected, (state) => {
+    builder.addCase(fetchAuthState.rejected, (state, action) => {
       state.loading = false;
       state.user = null;
     });

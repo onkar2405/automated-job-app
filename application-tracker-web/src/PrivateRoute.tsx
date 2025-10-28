@@ -1,24 +1,29 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
+import { RootState } from "./store/ApplicationStore";
+import { User } from "./types/user";
 
 interface PrivateRouteProps {
   children: React.ReactNode;
 }
 
-/**
- * PrivateRoute component to protect private routes
- * @param param0 - children elements to render
- * @returns PrivateRoute or redirect to login
- */
+interface AuthState {
+  user: User | null;
+  loading: boolean;
+}
+
 const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
-  const { user, loading } = useSelector((state: any) => state.authReducer);
+  const authState = useSelector<RootState, AuthState>(
+    (state) => state.authReducer
+  );
+  const { user, loading } = authState;
 
   if (loading) {
     return <p>Loading...</p>;
   }
 
-  return user ? <>{children}</> : <Navigate to="/login" replace />;
+  return user ? <>{children}</> : <Navigate to="/login" replace={true} />;
 };
 
 export default PrivateRoute;

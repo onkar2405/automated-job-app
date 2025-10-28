@@ -10,3 +10,5 @@ router.get("/status", (req, res) => {
     res.json({ loggedIn: false });
   }
 });
+
+module.exports = router;

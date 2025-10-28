@@ -1,11 +1,23 @@
 import React from "react";
+import { useSelector } from "react-redux";
+import { Navigate } from "react-router-dom";
+import { RootState } from "../../store/ApplicationStore";
 
 const Login: React.FC = () => {
+  const { user, loading } = useSelector(
+    (state: RootState) => state.authReducer
+  );
+
+  // Redirect to dashboard if user is already logged in
+  if (user && !loading) {
+    return <Navigate to="/" replace />;
+  }
+
   return (
     <div style={{ textAlign: "center", marginTop: "100px" }}>
       <h2>Please log in to continue</h2>
       <a
-        href="http://localhost:5000/auth/google"
+        href="http://localhost:5000/login"
         style={{
           display: "inline-block",
           padding: "10px 20px",
