@@ -8,7 +8,7 @@ const { google } = require("googleapis");
 
 // Login page
 router.get("/login", (req, res) => {
-  res.send('<a href="/auth">Login with Google</a>');
+  res.redirect("/auth");
 });
 
 // Root

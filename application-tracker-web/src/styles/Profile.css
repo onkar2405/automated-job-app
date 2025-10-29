@@ -1,0 +1,35 @@
+.profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.profile-name {
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  color: var(--google-gray-900);
+  font-weight: 500;
+}
+
+.profile-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: var(--google-shadow-1);
+  cursor: pointer;
+}
+
+.profile-initials {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-weight: 600;
+  font-family: "Roboto", sans-serif;
+  box-shadow: var(--google-shadow-1);
+  cursor: pointer;
+}

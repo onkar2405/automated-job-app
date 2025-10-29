@@ -8,6 +8,7 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { Application } from "../types/application";
+import "../styles/theme.css";
 
 /**
  * Component to hold the Job application data.
@@ -70,9 +71,17 @@ export default function AddApplicationModal({
           onChange={handleChange}
         />
       </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose}>Cancel</Button>
-        <Button onClick={() => onSave(form)} variant="contained">
+      <DialogActions sx={{ padding: "16px 24px" }}>
+        <Button
+          onClick={onClose}
+          className="google-button google-button-secondary"
+        >
+          Cancel
+        </Button>
+        <Button
+          onClick={() => onSave(form)}
+          className="google-button google-button-primary"
+        >
           Save
         </Button>
       </DialogActions>

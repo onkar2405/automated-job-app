@@ -1,0 +1,62 @@
+@import "../styles/theme.css";
+
+.applications-table {
+  min-width: 650px;
+  box-shadow: var(--google-shadow-1);
+  border-radius: var(--google-border-radius);
+  border: 1px solid var(--google-gray-300);
+}
+
+.table-header {
+  background-color: var(--google-gray-50);
+  border-bottom: 1px solid var(--google-gray-300);
+}
+
+.header-cell {
+  color: var(--google-gray-700);
+  font-weight: 500;
+  font-size: 14px;
+  padding: 16px;
+}
+
+.table-row {
+  transition: background-color 0.2s;
+  border-bottom: 1px solid var(--google-gray-300);
+}
+
+.table-row:hover {
+  background-color: var(--google-gray-50);
+}
+
+.table-row td {
+  color: var(--google-gray-900);
+  font-size: 14px;
+  padding: 16px;
+}
+
+.status-badge {
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.status-applied {
+  background-color: #e8f0fe;
+  color: var(--google-blue);
+}
+
+.status-interview {
+  background-color: #fef7e0;
+  color: #ea8600;
+}
+
+.status-rejected {
+  background-color: #fce8e6;
+  color: var(--google-red);
+}
+
+.status-accepted {
+  background-color: #e6f4ea;
+  color: #1e8e3e;
+}

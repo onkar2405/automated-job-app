@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import ApplicationsTable from "../ApplicationsTable";
 import AddApplicationModal from "../AddApplicationModal";
 import { Application } from "../../types/application";
+import "../../styles/theme.css";
 import { useDispatch, useSelector } from "react-redux";
 import { setInitialApplications } from "../../store/ApplicationSlice";
 import { getFormattedApplications } from "../../utils/typeFormatters";
@@ -88,8 +89,7 @@ export default function Dashboard() {
       </Typography>
 
       <Button
-        variant="contained"
-        color="primary"
+        className="google-button google-button-primary"
         sx={{ mb: 2 }}
         onClick={() => setModalOpen(true)}
       >

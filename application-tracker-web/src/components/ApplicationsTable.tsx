@@ -8,6 +8,8 @@ import {
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Application } from "../types/application";
+import "../styles/ApplicationsTable.css";
+import { useSelector } from "react-redux";
 
 /**
  * Function component to return the Applications table.
@@ -20,35 +22,47 @@ export default function ApplicationsTable({
   applications: Application[];
   removeApplication: any;
 }) {
+  const { loading } = useSelector((state: any) => state.authReducer);
+
   return (
-    <Table>
+    <Table className="applications-table">
       <TableHead>
-        <TableRow>
-          <TableCell>Company</TableCell>
-          <TableCell>Role</TableCell>
-          <TableCell>Status</TableCell>
-          <TableCell>Date</TableCell>
-          <TableCell></TableCell>
+        <TableRow className="table-header">
+          <TableCell className="header-cell">Company</TableCell>
+          <TableCell className="header-cell">Role</TableCell>
+          <TableCell className="header-cell">Status</TableCell>
+          <TableCell className="header-cell">Date</TableCell>
+          <TableCell className="header-cell">Actions</TableCell>
         </TableRow>
       </TableHead>
       <TableBody>
-        {applications?.map((app) => (
-          <TableRow key={app.id}>
-            <TableCell>{app.company}</TableCell>
-            <TableCell>{app.role}</TableCell>
-            <TableCell>{app.status}</TableCell>
-            <TableCell>{app.date}</TableCell>
-            <TableCell>
-              <Button
-                size="small"
-                variant="text"
-                onClick={() => removeApplication(app.id)}
-              >
-                <DeleteIcon />
-              </Button>
-            </TableCell>
-          </TableRow>
-        ))}
+        {loading ? (
+          <p>Loading...</p>
+        ) : (
+          applications?.map((app) => (
+            <TableRow key={app.id} hover className="table-row">
+              <TableCell>{app.company}</TableCell>
+              <TableCell>{app.role}</TableCell>
+              <TableCell>
+                <span
+                  className={`status-badge status-${app.status.toLowerCase()}`}
+                >
+                  {app.status}
+                </span>
+              </TableCell>
+              <TableCell>{app.date}</TableCell>
+              <TableCell>
+                <Button
+                  className="google-button google-button-danger"
+                  onClick={() => removeApplication(app.id)}
+                  startIcon={<DeleteIcon />}
+                >
+                  Delete
+                </Button>
+              </TableCell>
+            </TableRow>
+          ))
+        )}
       </TableBody>
     </Table>
   );

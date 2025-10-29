@@ -17,11 +17,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
   const authState = useSelector<RootState, AuthState>(
     (state) => state.authReducer
   );
-  const { user, loading } = authState;
-
-  if (loading) {
-    return <p>Loading...</p>;
-  }
+  const { user } = authState;
 
   return user ? <>{children}</> : <Navigate to="/login" replace={true} />;
 };

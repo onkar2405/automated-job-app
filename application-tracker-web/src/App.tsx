@@ -1,5 +1,7 @@
 import React, { useEffect } from "react";
 import "./App.css";
+import "./styles/theme.css";
+import Profile from "./components/Profile";
 import Dashboard from "./components/pages/Dashboard";
 import Login from "./components/pages/Login";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,15 +11,11 @@ import { Route, Routes } from "react-router-dom";
 
 function App() {
   const dispatch = useDispatch();
-  const { user, loading } = useSelector((state: any) => state.authReducer);
+  const { user } = useSelector((state: any) => state.authReducer);
 
   useEffect(() => {
     dispatch(fetchAuthState() as any);
   }, [dispatch]);
-
-  if (loading) {
-    return <p>Loading...</p>;
-  }
 
   return (
     <Routes>
@@ -26,7 +24,12 @@ function App() {
         element={
           <PrivateRoute>
             <div>
-              <div>{user ? <h2>Welcome {user.name} </h2> : null}</div>
+              {user ? (
+                <div className="main-header">
+                  <div className="header-left" />
+                  <Profile user={user} />
+                </div>
+              ) : null}
               <Dashboard />
             </div>
           </PrivateRoute>

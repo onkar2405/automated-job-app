@@ -1,0 +1,29 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.main-header {
+  background-color: var(--google-gray-100);
+  min-height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--google-gray-900);
+  padding: 0 24px;
+  margin-bottom: 16px;
+}
+
+.header-left .greeting {
+  font-family: "Roboto", sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--google-gray-900);
+}
+
+.app-title {
+  font-family: "Roboto", sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+}

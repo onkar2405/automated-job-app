@@ -1,0 +1,157 @@
+:root {
+  --google-blue: #1a73e8;
+  --google-blue-hover: #1557b0;
+  --google-red: #d93025;
+  --google-red-hover: #b3271f;
+  --google-gray-50: #f8f9fa;
+  --google-gray-100: #f1f3f4;
+  --google-gray-300: #dadce0;
+  --google-gray-500: #5f6368;
+  --google-gray-700: #3c4043;
+  --google-gray-900: #202124;
+  --google-surface: #ffffff;
+  --google-shadow-1: 0 1px 2px 0 rgba(60, 64, 67, 0.3),
+    0 1px 3px 1px rgba(60, 64, 67, 0.15);
+  --google-shadow-2: 0 1px 3px 0 rgba(60, 64, 67, 0.3),
+    0 4px 8px 3px rgba(60, 64, 67, 0.15);
+  --google-border-radius: 4px;
+}
+
+.google-button {
+  font-family: "Roboto", sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  padding: 8px 24px;
+  border-radius: var(--google-border-radius);
+  transition: all 0.2s;
+  text-transform: none;
+  letter-spacing: 0.25px;
+  box-shadow: none;
+  min-width: 96px;
+}
+
+.google-button-primary {
+  background-color: var(--google-blue);
+  color: white;
+  border: none;
+}
+
+.google-button-primary:hover {
+  background-color: var(--google-blue-hover);
+  color: white;
+}
+
+.google-button-secondary {
+  background-color: white;
+  color: var(--google-blue);
+  border: 1px solid var(--google-gray-300);
+}
+
+.google-button-secondary:hover {
+  background-color: var(--google-gray-50);
+  border-color: var(--google-gray-300);
+}
+
+.google-button-danger {
+  background-color: white;
+  color: var(--google-red);
+  border: 1px solid var(--google-gray-300);
+}
+
+.google-button-danger:hover {
+  background-color: var(--google-gray-50);
+  color: var(--google-red-hover);
+}
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: var(--google-gray-50);
+}
+
+.login-container h2 {
+  color: var(--google-gray-900);
+  font-family: "Roboto", sans-serif;
+  font-size: 24px;
+  margin-bottom: 32px;
+}
+
+.google-signin-button {
+  display: flex;
+  align-items: center;
+  padding: 1px 24px 1px 1px;
+  background-color: white;
+  border: 1px solid var(--google-gray-300);
+  border-radius: 4px;
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  color: var(--google-gray-700);
+  text-decoration: none;
+  transition: background-color 0.2s;
+  box-shadow: var(--google-shadow-1);
+}
+
+.google-signin-button:hover {
+  background-color: var(--google-gray-50);
+  box-shadow: var(--google-shadow-2);
+}
+
+.google-logo {
+  width: 38px;
+  height: 38px;
+  margin-right: 24px;
+  padding: 8px;
+  background: white;
+}
+
+.google-signin-button span {
+  font-weight: 500;
+}
+
+/* Dialog Styles */
+.MuiDialog-paper {
+  border-radius: 8px !important;
+  box-shadow: var(--google-shadow-2) !important;
+}
+
+.MuiDialogTitle-root {
+  background-color: var(--google-gray-50);
+  border-bottom: 1px solid var(--google-gray-300);
+  padding: 24px !important;
+  font-family: "Roboto", sans-serif !important;
+  font-size: 20px !important;
+  color: var(--google-gray-900) !important;
+}
+
+.MuiDialogContent-root {
+  padding: 24px !important;
+}
+
+.MuiTextField-root {
+  margin-bottom: 16px !important;
+}
+
+.MuiInputLabel-root {
+  color: var(--google-gray-700) !important;
+  font-family: "Roboto", sans-serif !important;
+}
+
+.MuiOutlinedInput-root {
+  border-radius: var(--google-border-radius) !important;
+}
+
+.MuiOutlinedInput-notchedOutline {
+  border-color: var(--google-gray-300) !important;
+}
+
+.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: var(--google-gray-500) !important;
+}
+
+.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: var(--google-blue) !important;
+  border-width: 2px !important;
+}
