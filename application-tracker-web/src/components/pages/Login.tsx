@@ -16,7 +16,7 @@ const Login: React.FC = () => {
   return (
     <div className="login-container">
       <h2>Please log in to continue</h2>
-      <a href="http://localhost:5000/login" className="google-signin-button">
+      <a href="http://localhost:5000/auth" className="google-signin-button">
         <img src="/google-logo.svg" alt="Google logo" className="google-logo" />
         <span>Sign in with Google</span>
       </a>

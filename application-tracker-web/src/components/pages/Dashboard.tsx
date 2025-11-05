@@ -20,7 +20,9 @@ export default function Dashboard() {
   const [modalOpen, setModalOpen] = useState(false);
 
   const fetchApplications = () => {
-    return fetch("http://localhost:5000/applications")
+    return fetch("http://localhost:5000/applications", {
+      credentials: "include",
+    })
       .then((data) => data.json())
       .then((data) =>
         dispatch(setInitialApplications(getFormattedApplications(data)))
@@ -33,6 +35,7 @@ export default function Dashboard() {
   const removeApplication = (id: number) => {
     fetch("http://localhost:5000/removeApplication", {
       method: "POST",
+      credentials: "include",
       headers: {
         "Content-type": "application/json; charset=UTF-8",
       },
@@ -52,13 +55,14 @@ export default function Dashboard() {
     const payLoadData = {
       id,
       company,
-      appliedOn: date,
+      appliedOn: date || new Date().toISOString().split("T")[0],
       role,
-      status: "APPLIED",
+      status: "Applied",
     };
 
     await fetch("http://localhost:5000/addApplication", {
       method: "POST",
+      credentials: "include",
       headers: {
         "Content-type": "application/json; charset=UTF-8",
       },

@@ -12,7 +12,6 @@ const prisma = new PrismaClient();
 // Import routes and services
 const gmailRoutes = require("./routes/gmail");
 const authRoutes = require("./routes/authRoutes");
-const supabase = require("./utils/supabaseClient");
 const { fetchEmails } = require("./gmail/gmailService");
 
 // No auth required here:
@@ -23,6 +22,7 @@ app.use(
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
+    exposedHeaders: ["set-cookie"],
   })
 );
 app.use(express.json());
@@ -42,56 +42,8 @@ app.use(
 );
 
 // Routes
-app.get("/applications", async (req, res) => {
-  const { data } = await supabase.from("applications").select("*");
-  res.json(data);
-});
-
-app.post("/addApplication", async (req, res) => {
-  const { company, role, status, appliedOn, gmail_message_id } = req.body;
-
-  try {
-    const { data, error } = await supabase
-      .from("applications")
-      .insert([
-        {
-          company,
-          role,
-          status,
-          applied_on: appliedOn,
-          notes: "just applied",
-          gmail_message_id, // 🔑 unique Gmail ID
-        },
-      ])
-      .select();
-
-    if (error) return res.status(400).json({ error: error.message });
-
-    if (error && error.code === "23505") {
-      console.log("Duplicate email, skipping insert.");
-    }
-
-    res.json({ application: data[0] });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-app.post("/removeApplication", async (req, res) => {
-  try {
-    const { data, error } = await supabase
-      .from("applications")
-      .delete()
-      .eq("id", req.body.id)
-      .select();
-
-    if (error) return res.status(400).json({ error: error.message });
-
-    res.json({ application: data[0] });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
+const applicationsRoutes = require("./routes/applications");
+app.use("/", applicationsRoutes);
 
 // Mount routes
 app.use("/", gmailRoutes);
